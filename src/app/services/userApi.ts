@@ -12,7 +12,7 @@ endpoints:(build)=>({
             body: {email,password,name}
         })
     }),
-    login: build.mutation<User,LoginProps>({
+    login: build.mutation<{token :string} ,LoginProps>({
         query:({email,password})=>({
             url:'/api/login',
             method: 'POST',
