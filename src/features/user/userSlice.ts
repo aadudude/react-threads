@@ -9,7 +9,7 @@ interface InitialState {
     isAuthenticated: boolean
     users: User[] | null
     current: User | null
-    token?: string
+    token?: string|null
 }
 
 const initialState:InitialState = {
@@ -17,10 +17,8 @@ const initialState:InitialState = {
     isAuthenticated:false,
     users:null,
     current: null,
+    token: localStorage.getItem('token') || null
 }
-
-
-//logout и resetUser
 
 export const userSlice = createSlice({
     name: 'user',
