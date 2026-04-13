@@ -17,5 +17,4 @@ export const api = createApi({
     reducerPath:'splitApi',
     baseQuery,
     endpoints:()=>({})
-
 })
