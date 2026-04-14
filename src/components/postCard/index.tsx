@@ -4,7 +4,7 @@ import { useDeletePostMutation, useLazyGetPostsQuery } from "../../app/services/
 import { isErrorWithMessage, isFetchBaseQueryError } from "../../services/helpers.ts"
 import { useState } from "react"
 import type { Like } from "../../app/types.ts"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 type PostCardProps = {
   authorName:string
@@ -18,6 +18,7 @@ type PostCardProps = {
 }
 
 export const PostCard =({ authorName,avatarUrl,createdAt,likes,comments,postId,content,isDetails=false }:PostCardProps) => {
+  const navigate = useNavigate()
   const [deletePost,{ isLoading }] =useDeletePostMutation()
   const [triggerGetPosts] = useLazyGetPostsQuery()
   const [error, setError] = useState("")
@@ -26,6 +27,9 @@ export const PostCard =({ authorName,avatarUrl,createdAt,likes,comments,postId,c
     try{
       await deletePost({ id: postId }).unwrap()
       await triggerGetPosts()
+      if (isDetails){
+        navigate("/dashboard")
+      }
     }catch(err){
       if (isFetchBaseQueryError(err)) {
         const errMsg = "error" in err ? err.error : (err.data as {

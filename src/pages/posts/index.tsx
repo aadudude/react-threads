@@ -9,7 +9,7 @@ export const Posts =() => {
         {posts?.map(post => (<PostCard key={post.id} postId={post.id} avatarUrl={post.author.avatarUrl}
           authorName={post.author.name}
           createdAt={new Date(post.createdAt).toLocaleDateString("ru-RU")}
-          content={post.content} likes={[]} comments={[]} isDetails={true} />))}
+          content={post.content} likes={[]} comments={[]} isDetails={false} />))}
       </div>
 
     </div>
