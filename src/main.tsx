@@ -8,9 +8,11 @@ import {store} from "./app/store.ts";
 import {Provider} from "react-redux";
 import {AuthGuard} from "./features/user/AuthGuard.tsx";
 import {Dashboard} from "./pages/dashboard";
+import {ThemeProvider} from "next-themes";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+      <ThemeProvider  attribute="class" defaultTheme="light">
       <Provider store={store}>
       <BrowserRouter>
           <Routes>
@@ -22,5 +24,6 @@ createRoot(document.getElementById('root')!).render(
           </Routes>
       </BrowserRouter>
       </Provider>
+      </ThemeProvider>
   </StrictMode>,
 )

@@ -1,47 +1,97 @@
-import {useLoginMutation} from "../../app/services/userApi.ts";
-import {useState} from "react";
-import type {LoginProps} from "../../app/services/types.ts";
-import {useNavigate} from "react-router";
-import {isErrorWithMessage, isFetchBaseQueryError} from "../../services/helpers.ts";
+import { useLoginUserMutation } from "../../app/services/userApi.ts"
+import { type Dispatch, type SetStateAction, useState } from "react"
+import { Link, useNavigate } from "react-router"
+import { Check } from "@gravity-ui/icons"
+import { isErrorWithMessage, isFetchBaseQueryError } from "../../services/helpers.ts"
+import { Form, Button, FieldError, Input, Label, TextField, ErrorMessage } from "@heroui/react"
+import { useForm } from "react-hook-form"
+import type { SelectedProps } from "../../pages/auth"
 
-export const Login = () => {
-    const navigate = useNavigate()
+type LoginForm = {
+  email: string
+  password: string
+}
 
-    const [login, {isLoading}] = useLoginMutation()
-    const [formState, setFormState] = useState<LoginProps>({
-        email: '',
-        password: ''
-    })
-    const [error,setError] = useState<string|null>(null)
+export const Login = ({ setSelected }:{setSelected:Dispatch<SetStateAction<SelectedProps>>}) => {
+  const [loginUser, { isLoading }] = useLoginUserMutation()
+  const navigate = useNavigate()
 
-    const handleSubmit = async (e:React.SubmitEvent) => {
-        e.preventDefault()
-        try{
-        await login({email:formState.email,password:formState.password}).unwrap()
-            navigate("/dashboard");
-        }catch(err){
-            if (isFetchBaseQueryError(err)) {
-                const errMsg = 'error' in err ? err.error : (err.data as{error?:string})?.error || 'Что-то пошло не так'
-                setError(errMsg)
-            } else if (isErrorWithMessage(err)) {
-                setError(err.message)
-            }
-        }
+  const [fetchError,setFetchError] = useState("")
+
+  const { register, handleSubmit,formState:{  errors } } = useForm<LoginForm>({
+    mode: "onSubmit",
+    reValidateMode: "onBlur",
+  })
+
+  const onSubmit = async (data:LoginForm) => {
+    try {
+      await loginUser({ email: data.email, password: data.password }).unwrap()
+      navigate("/dashboard")
+    } catch (err) {
+      if (isFetchBaseQueryError(err)) {
+        const errMsg = "error" in err ? err.error : (err.data as {
+          error?: string
+        })?.error || "Что-то пошло не так"
+        setFetchError(errMsg)
+      } else if (isErrorWithMessage(err)) {
+        setFetchError(err.message)
+      }
     }
+  }
+  return (
+    <div >
+      <Form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)} >
+        <TextField
+          isInvalid={!!errors.email}
+        >
+          <Label>Email</Label>
+          <Input
+            {...register("email",{
+              required: "Email обязателен",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Некорректный email адрес",
+              },
+            })}
+            type='email'
+            placeholder="john@example.com" />
+          <FieldError >
+            { errors.email && <p>{errors.email.message}</p>}
+          </FieldError>
+        </TextField>
 
-    return (
-        <div>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <p>login</p>
-                    <input type="text" value={formState.email} placeholder='email'
-                           onChange={e => setFormState(prev => ({...prev, email: e.target.value}))}/>
-                    <input type="text" value={formState.password} placeholder='password'
-                           onChange={e => setFormState(prev => ({...prev, password: e.target.value}))}/>
-                    {error && <p>{error}</p> }
-                    <button disabled={isLoading} type='submit'>submit</button>
-                </form>
-            </div>
+        <TextField
+          isInvalid={!!errors.password}
+        >
+          <Label>Пароль</Label>
+          <Input
+            {...register("password",{
+              required:"Пароль обязателен",
+              minLength:{
+                value:6,
+                message:"Пароль минимум 6 символов",
+              },
+            })}
+            type='password'
+            placeholder="Введите пароль" />
+          <FieldError >
+            { errors.password && <p>{errors.password.message}</p>}
+          </FieldError>
+        </TextField>
+        <div className='flex gap-1.5 justify-center'>
+          <span>Нет аккаунта?</span>
+          <Link className="underline" onClick={() => setSelected("register")} to={""}>
+          Зарегистрируйтесь
+          </Link>
         </div>
-    )
+        <ErrorMessage>{!!fetchError && <>{fetchError}</>}</ErrorMessage>
+        <div className="flex">
+          <Button fullWidth type="submit" isDisabled={!!isLoading}>
+            <Check />
+            Войти
+          </Button>
+        </div>
+      </Form>
+    </div>
+  )
 }
