@@ -1,20 +1,13 @@
 export type User = {
     id: string
     email: string
-    password: string
     name?: string
-    avatarUrl?: string
-    dateOfBirth?: Date
-    createdAt: Date
-    updatedAt: Date
-    bio?: string
-    location?: string
-    posts: Post[]
-    following: Follows[]
-    followers: Follows[]
-    likes: Like[]
-    comments: Comment[]
-    isFollowing?: boolean
+    avatarUrl?: string | null
+    dateOfBirth?: string | null
+    createdAt: string
+    updatedAt?: string
+    bio?: string | null
+    location?: string | null
 }
 
 export type Follows = {
@@ -33,8 +26,7 @@ export type Post = {
     likes: Like[]
     comments: Comment[]
     likedByUser: boolean
-    createdAt: Date
-    updatedAt: Date
+    createdAt: string
 }
 
 export type Like = {
