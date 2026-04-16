@@ -39,7 +39,7 @@ export const PostCard = ({
       setFetchError("")
       await deletePost({ id: postId }).unwrap()
       if (isDetails) {
-        navigate("/dashboard")
+        navigate("/")
       }
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
@@ -107,7 +107,7 @@ export const PostCard = ({
             <div className='flex justify-center items-center gap-1 cursor-default'>
               <Comment/> {commentsCount}
             </div>
-            : <Link to={`/dashboard/${postId}`}
+            : <Link to={`/${postId}`}
               className='flex justify-center items-center gap-1 cursor-pointer hover:opacity-70'>
               <Comment/> {commentsCount}
             </Link>}

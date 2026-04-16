@@ -26,7 +26,7 @@ export const Login = ({ setSelected }:{setSelected:Dispatch<SetStateAction<Selec
   const onSubmit = async (data:LoginForm) => {
     try {
       await loginUser({ email: data.email, password: data.password }).unwrap()
-      navigate("/dashboard")
+      navigate("/")
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         const errMsg = "error" in err ? err.error : (err.data as {

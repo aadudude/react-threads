@@ -1,7 +1,6 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import "./index.css"
-import App from "./App.tsx"
 import { BrowserRouter, Route, Routes } from "react-router"
 import { Auth } from "./pages/auth"
 import { store } from "./app/store.ts"
@@ -10,6 +9,10 @@ import { AuthGuard } from "./features/user/AuthGuard.tsx"
 import { ThemeProvider } from "next-themes"
 import { PostDetails } from "./components/postDetails"
 import { Layout } from "./components/layout"
+import { Posts } from "./pages/posts"
+import { Followers } from "./pages/followers"
+import { Following } from "./pages/following.tsx"
+import { User } from "./pages/user"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,8 +22,13 @@ createRoot(document.getElementById("root")!).render(
           <Routes>
             <Route path='/auth' element={<Auth/>}/>
             <Route element={<AuthGuard/>}>
-              <Route path='/' element={<Layout/>}/>
-              <Route path='/:postId' element={<PostDetails/>}/>
+              <Route element={<Layout/>} >
+                <Route path='/' element={<Posts/>}/>
+                <Route path='/:postId' element={<PostDetails/>}/>
+                <Route path='/users/:userId' element={<User/>}/>
+                <Route path='/followers' element={<Followers/>}/>
+                <Route path='/following' element={<Following/>}/>
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
