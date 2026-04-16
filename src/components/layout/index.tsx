@@ -2,6 +2,7 @@ import { useAppDispatch } from "../../app/store.ts"
 import { Outlet, useNavigate } from "react-router"
 import { logout } from "../../features/user/userSlice.ts"
 import { Button, Card } from "@heroui/react"
+import { NavBar } from "../navBar"
 
 export const Layout = () => {
 
@@ -23,13 +24,7 @@ export const Layout = () => {
       </header>
 
       <div className="flex flex-col md:flex-row lg:grid lg:grid-cols-4 gap-8 ">
-        <nav className='col-span-1 flex flex-col bg-amber-300 items-end '>
-          <ul className='flex flex-col gap-6'>
-            <li>Посты</li>
-            <li>Подписки</li>
-            <li>Подписчики</li>
-          </ul>
-        </nav>
+        <NavBar/>
         <main className='col-span-2 '>
           <Outlet/>
         </main>
