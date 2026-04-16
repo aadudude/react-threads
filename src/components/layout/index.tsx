@@ -1,17 +1,20 @@
-import { useAppDispatch } from "../../app/store.ts"
+import { useAppDispatch, useAppSelector } from "../../app/store.ts"
 import { Outlet, useNavigate } from "react-router"
-import { logout } from "../../features/user/userSlice.ts"
+import { logout, selectUser } from "../../features/user/userSlice.ts"
 import { Button, Card } from "@heroui/react"
 import { NavBar } from "../navBar"
 
 export const Layout = () => {
-
+  const userId = useAppSelector(selectUser)?.id
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const handleLogout = () => {
     dispatch(logout())
     navigate("/")
+  }
+  const handleUserProfile =() => {
+    navigate(`/users/${userId}`)
   }
 
   return (
@@ -43,7 +46,7 @@ export const Layout = () => {
                     <div className="text-sm font-medium text-black">wfewefwfewe</div>
                     <div className="text-xs text-black/60">wfewef@sdfsdf.com</div>
                   </div>
-                  <Button className="bg-white text-black" size="sm" variant="tertiary">
+                  <Button className="bg-white text-black" size="sm" variant="tertiary" onClick={handleUserProfile}>
                                     В профиль
                   </Button>
                 </Card.Footer>

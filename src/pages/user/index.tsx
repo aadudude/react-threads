@@ -1,4 +1,5 @@
 import { useParams } from "react-router"
+import { BackButton } from "../../components/backButton"
 
 export const User =() => {
   const { userId } = useParams()
@@ -6,6 +7,9 @@ export const User =() => {
     throw new Error("userId is Required!")
   }
   return (
-    <div>User: {userId}</div>
+    <div className='flex flex-col gap-5'>
+      <BackButton/>
+      <div>User: {userId}</div>
+    </div>
   )
 }

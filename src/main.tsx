@@ -11,7 +11,7 @@ import { PostDetails } from "./components/postDetails"
 import { Layout } from "./components/layout"
 import { Posts } from "./pages/posts"
 import { Followers } from "./pages/followers"
-import { Following } from "./pages/following.tsx"
+import { Index } from "./pages/following"
 import { User } from "./pages/user"
 
 createRoot(document.getElementById("root")!).render(
@@ -27,7 +27,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path='/:postId' element={<PostDetails/>}/>
                 <Route path='/users/:userId' element={<User/>}/>
                 <Route path='/followers' element={<Followers/>}/>
-                <Route path='/following' element={<Following/>}/>
+                <Route path='/following' element={<Index/>}/>
               </Route>
             </Route>
           </Routes>

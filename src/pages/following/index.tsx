@@ -1,6 +1,6 @@
 import { BackButton } from "../../components/backButton"
 
-export const Followers = () => {
+export const Index =() => {
   return (
     <div className='flex flex-col gap-5'>
       <BackButton/>

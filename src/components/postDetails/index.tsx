@@ -9,6 +9,7 @@ import { isErrorWithMessage, isFetchBaseQueryError } from "../../services/helper
 import { CommentCard } from "../commentCard"
 import type { Post } from "../../app/types.ts"
 import type { CommentFormData, PostDetailsParams } from "./types.ts"
+import { BackButton } from "../backButton"
 
 export const PostDetails = () => {
   const [createComment, { isLoading: IsCommentSending }] = useCreateCommentMutation()
@@ -19,7 +20,6 @@ export const PostDetails = () => {
   }
   const { data, isLoading: IsPostLoading } = useGetPostQuery({ id: postId })
   const post: Post | undefined = data
-
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<CommentFormData>({
     mode: "onTouched",
@@ -48,48 +48,51 @@ export const PostDetails = () => {
     <Spinner/>
   </div>
   return (
-    <div className='flex flex-col gap-12'>
-      {post && <PostCard key={post.id} postId={post.id} avatarUrl={post.author.avatarUrl}
-        authorName={post.author.name}
-        createdAt={new Date(post.createdAt).toLocaleDateString("ru-RU")}
-        content={post.content} likes={post.likes} comments={post.comments} isDetails={true}/>
-      }
+    <div className='flex flex-col gap-5'>
+      <BackButton/>
+      <div className='flex flex-col gap-12'>
+        {post && <PostCard key={post.id} postId={post.id} avatarUrl={post.author.avatarUrl}
+          authorName={post.author.name}
+          createdAt={new Date(post.createdAt).toLocaleDateString("ru-RU")}
+          content={post.content} likes={post.likes} comments={post.comments} isDetails={true}/>
+        }
 
-      <div className='flex flex-col gap-6'>
-        <div className="flex flex-col gap-4">
+        <div className='flex flex-col gap-6'>
+          <div className="flex flex-col gap-4">
 
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-2">
-              <TextField
-                aria-labelledby="textarea-controlled-comment"
-                aria-label="Short comment"
-                isInvalid={!!errors.comment}
-              >
-                <TextArea
-                  {...register("comment", {
-                    required: "Напишите комментарий",
-                    minLength: {
-                      value: 5,
-                      message: "Минимальная длина сообщения - 5 символов.",
-                    },
-                  })}
-                  id="textarea-rows-3"
-                  placeholder="Напишите свой комментарий"
-                  rows={3}/>
-                {errors.comment && (
-                  <FieldError>{errors.comment.message}</FieldError>
-                )}
-              </TextField>
-              <ErrorMessage>{!!fetchError && <>{fetchError}</>}</ErrorMessage>
-              <Button type='submit' isDisabled={IsCommentSending}>Ответить</Button>
-            </div>
-          </Form>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-2">
+                <TextField
+                  aria-labelledby="textarea-controlled-comment"
+                  aria-label="Short comment"
+                  isInvalid={!!errors.comment}
+                >
+                  <TextArea
+                    {...register("comment", {
+                      required: "Напишите комментарий",
+                      minLength: {
+                        value: 5,
+                        message: "Минимальная длина сообщения - 5 символов.",
+                      },
+                    })}
+                    id="textarea-rows-3"
+                    placeholder="Напишите свой комментарий"
+                    rows={3}/>
+                  {errors.comment && (
+                    <FieldError>{errors.comment.message}</FieldError>
+                  )}
+                </TextField>
+                <ErrorMessage>{!!fetchError && <>{fetchError}</>}</ErrorMessage>
+                <Button type='submit' isDisabled={IsCommentSending}>Ответить</Button>
+              </div>
+            </Form>
+          </div>
         </div>
+        {post?.comments && post.comments.map(comment => <CommentCard authorName={comment.user?.name || ""}
+          avatarUrl={comment.user?.avatarUrl || ""}
+          postId={comment.postId} commentId={comment.id}
+          content={comment.content}/>)}
       </div>
-      {post?.comments && post.comments.map(comment => <CommentCard authorName={comment.user?.name || ""}
-        avatarUrl={comment.user?.avatarUrl || ""}
-        postId={comment.postId} commentId={comment.id}
-        content={comment.content}/>)}
     </div>
   )
 }
