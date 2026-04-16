@@ -1,9 +1,9 @@
 import { api } from "./api.ts"
-import type { PostProps } from "./types.ts"
+import type { Post } from "../types.ts"
 
 export const postsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    createPost: build.mutation<PostProps, { content: string }>({
+    createPost: build.mutation<Post, { content: string }>({
       query: ({ content }) => ({
         url: "/posts",
         method: "POST",
@@ -11,13 +11,13 @@ export const postsApi = api.injectEndpoints({
       }),
       invalidatesTags:[{ type: "Posts" }],
     }),
-    getPosts: build.query<PostProps[], void>({
+    getPosts: build.query<Post[], void>({
       query: () => ({
         url: "/posts",
       }),
       providesTags: [{ type: "Posts" }],
     }),
-    getPost: build.query<PostProps, { id: string }>({
+    getPost: build.query<Post, { id: string }>({
       query: ({ id }) => ({
         url: `/posts/${id}`,
       }),
