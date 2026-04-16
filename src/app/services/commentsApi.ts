@@ -1,16 +1,19 @@
 import { api } from "./api.ts"
-import type { CommentProps, CommentRequestProps } from "./types.ts"
+import type { CommentEntity } from "../types.ts"
+import type { CommentRequestProps } from "./types.ts"
+
 
 
 export const commentsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    createComment: build.mutation<CommentProps, CommentRequestProps>({
+    createComment: build.mutation<CommentEntity, CommentRequestProps>({
       query: ({ content, postId }) => ({
         url: "/comments",
         method: "POST",
         body: { content, postId },
       }),
       invalidatesTags:(_result,_error,arg) => [
+        { type: "Posts" },
         { type:"Post",id:arg.postId },
       ],
     }),
@@ -20,6 +23,7 @@ export const commentsApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags:(_result,_error,arg) => [
+        { type: "Posts" },
         { type:"Post",id:arg.postId },
       ],
     }),

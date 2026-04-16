@@ -1,8 +1,7 @@
-//todo
-
 import type { User } from "../../app/types.ts"
 import { createSlice } from "@reduxjs/toolkit"
 import { userApi } from "../../app/services/userApi.ts"
+import type { RootState } from "../../app/store.ts"
 
 type InitialState = {
     user: User | null
@@ -50,3 +49,5 @@ export const userSlice = createSlice({
 })
 
 export const { logout, resetUser } = userSlice.actions
+
+export const selectUser = (state:RootState) => state.user.current

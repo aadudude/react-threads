@@ -1,21 +1,28 @@
 export type User = {
     id: string
     email: string
-    name?: string
-    avatarUrl?: string | null
-    dateOfBirth?: string | null
+    name: string
+    avatarUrl: string
+    dateOfBirth: string | null
     createdAt: string
-    updatedAt?: string
-    bio?: string | null
-    location?: string | null
+    updatedAt: string
+    bio: string | null
+    location: string | null
+    password?: string
 }
 
-export type Follows = {
+export type Like = {
     id: string
-    follower: User
-    followerId: string
-    following: User
-    followingId: string
+    userId: string
+    postId: string
+}
+
+export type CommentEntity = {
+    id: string
+    content: string
+    userId: string
+    postId: string
+    user?: User
 }
 
 export type Post = {
@@ -24,24 +31,15 @@ export type Post = {
     author: User
     authorId: string
     likes: Like[]
-    comments: Comment[]
+    comments: CommentEntity[]
     likedByUser: boolean
     createdAt: string
 }
 
-export type Like = {
+export type Follows = {
     id: string
-    user: User
-    userId: string
-    post: Post
-    postId: string
-}
-
-export type Comment = {
-    id: string
-    content: string
-    user: User
-    userId: string
-    post: Post
-    postId: string
+    follower: User
+    followerId: string
+    following: User
+    followingId: string
 }
