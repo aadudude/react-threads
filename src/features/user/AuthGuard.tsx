@@ -3,8 +3,10 @@ import { useAppSelector } from "../../app/store.ts"
 import { useCurrentQuery } from "../../app/services/userApi.ts"
 
 export const AuthGuard = () => {
-  const { isLoading } = useCurrentQuery()
+  const token = localStorage.getItem("token")
   const location = useLocation()
+
+  const { isLoading } = useCurrentQuery(undefined,{ skip:!token })
   const isAuthenticated = useAppSelector(state => state.user.isAuthenticated)
   if (isLoading) return <p>Loading...</p>
   if (!isAuthenticated) {

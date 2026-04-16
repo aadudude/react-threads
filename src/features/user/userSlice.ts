@@ -23,7 +23,12 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout: () => initialState,
+    logout: (state) => {
+      localStorage.removeItem("token")
+      state.isAuthenticated=false
+      state.current=null
+      state.token=null
+    },
     resetUser: (state) => {
       state.user = null
     },
