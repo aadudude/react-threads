@@ -1,19 +1,18 @@
-import { Button, Description, ErrorMessage, FieldError, Form, Label, TextArea, TextField } from "@heroui/react"
+import { Button, Description, ErrorMessage, FieldError, Form, TextArea, TextField } from "@heroui/react"
 import { useState } from "react"
 import { LogoTelegram } from "@gravity-ui/icons"
-import { useCreatePostMutation, useLazyGetPostsQuery } from "../../app/services/postsApi.ts"
+import { useCreatePostMutation } from "../../app/services/postsApi.ts"
 import { isErrorWithMessage, isFetchBaseQueryError } from "../../services/helpers.ts"
 import { useForm } from "react-hook-form"
 
-type PostForm = {
+type CreatePostFormData = {
     content: string
 }
 
 export const CreatePost = () => {
   const [createPost, { isLoading }] = useCreatePostMutation()
-  const [triggerGetPosts] = useLazyGetPostsQuery()
 
-  const { register, handleSubmit, formState: { errors, isValid },watch } = useForm<PostForm>({
+  const { register, handleSubmit, formState: { errors }, watch, reset } = useForm<CreatePostFormData>({
     mode: "onTouched",
     reValidateMode: "onBlur",
   })
@@ -24,8 +23,8 @@ export const CreatePost = () => {
   const onSubmit = async () => {
     try {
       await createPost({ content: contentValue }).unwrap()
-      await triggerGetPosts()
       setFetchError("")
+      reset()
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         const errMsg = "error" in err ? err.error : (err.data as {
@@ -42,7 +41,6 @@ export const CreatePost = () => {
       <Form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
 
         <TextField isRequired isInvalid={!!errors.content} name="bio">
-          <Label>Bio</Label>
           <TextArea {...register("content", {
             required: "Напишите что-то",
             minLength: {
@@ -63,7 +61,7 @@ export const CreatePost = () => {
                         Символов: {contentValue.length} / 280
         </Description>
         <ErrorMessage>{!!fetchError && <>{fetchError}</>}</ErrorMessage>
-        <Button type='submit' isDisabled={ !isValid || isLoading}>
+        <Button type='submit' isDisabled={ isLoading}>
                     Добавить пост
           <LogoTelegram/>
         </Button>
