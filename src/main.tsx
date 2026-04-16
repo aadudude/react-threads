@@ -12,7 +12,7 @@ import { Layout } from "./components/layout"
 import { Posts } from "./pages/posts"
 import { Followers } from "./pages/followers"
 import { Index } from "./pages/following"
-import { User } from "./pages/user"
+import { UserInfo } from "./pages/userInfo"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -25,7 +25,9 @@ createRoot(document.getElementById("root")!).render(
               <Route element={<Layout/>} >
                 <Route path='/' element={<Posts/>}/>
                 <Route path='/:postId' element={<PostDetails/>}/>
-                <Route path='/users/:userId' element={<User/>}/>
+              </Route>
+              <Route element={<Layout showUserCard={false}/>}>
+                <Route path='/users/:userId' element={<UserInfo/>}/>
                 <Route path='/followers' element={<Followers/>}/>
                 <Route path='/following' element={<Index/>}/>
               </Route>

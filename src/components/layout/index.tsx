@@ -1,11 +1,16 @@
 import { useAppDispatch, useAppSelector } from "../../app/store.ts"
 import { Outlet, useNavigate } from "react-router"
 import { logout, selectUser } from "../../features/user/userSlice.ts"
-import { Button, Card } from "@heroui/react"
+import { Button, Spinner } from "@heroui/react"
 import { NavBar } from "../navBar"
+import { UserCard } from "../userCard"
 
-export const Layout = () => {
-  const userId = useAppSelector(selectUser)?.id
+type LayoutProps = {
+    showUserCard?: boolean
+}
+
+export const Layout = ({ showUserCard = true }: LayoutProps) => {
+  const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -14,8 +19,14 @@ export const Layout = () => {
     navigate("/")
   }
   const handleUserProfile =() => {
-    navigate(`/users/${userId}`)
+    navigate(`/users/${user?.id}`)
   }
+
+  const gridCols = showUserCard ? "lg:grid-cols-4" : "lg:grid-cols-3"
+
+  if (!user) return <div className="flex items-center gap-4">
+    <Spinner/>
+  </div>
 
   return (
     <div className='flex flex-col bg-gray-100 px-4 md:px-6 lg:px-60 gap-8 '>
@@ -26,34 +37,17 @@ export const Layout = () => {
         </div>
       </header>
 
-      <div className="flex flex-col md:flex-row lg:grid lg:grid-cols-4 gap-8 ">
+      <div className={`flex flex-col md:flex-row lg:grid gap-8 ${gridCols}`}>
         <NavBar/>
         <main className='col-span-2 '>
           <Outlet/>
         </main>
-        <aside>
-          <div className='flex flex-col items-center col-span-1'>
-            <div className='w-[96%] h-[96%]'>
-              <Card className=" min-h-80 overflow-hidden rounded-3xl ">
-                <img
-                  alt="NEO Home Robot"
-                  aria-hidden="true"
-                  className="absolute inset-0 h-full w-full object-cover"
-                  src="https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/neo2.jpeg"
-                />
-                <Card.Footer className="z-10 mt-auto flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium text-black">wfewefwfewe</div>
-                    <div className="text-xs text-black/60">wfewef@sdfsdf.com</div>
-                  </div>
-                  <Button className="bg-white text-black" size="sm" variant="tertiary" onClick={handleUserProfile}>
-                                    В профиль
-                  </Button>
-                </Card.Footer>
-              </Card>
-            </div>
-          </div>
-        </aside>
+        {showUserCard &&
+                    <aside>
+                      <UserCard buttonText='В профиль' email={user?.email} name={user?.name}
+                        avatarUrl={user?.avatarUrl} onClick={handleUserProfile}/>
+                    </aside>
+        }
       </div>
     </div>
   )
