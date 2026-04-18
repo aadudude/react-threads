@@ -1,10 +1,9 @@
 import { useParams } from "react-router"
 import { BackButton } from "../../components/backButton"
-import { Button, Modal, Spinner, Surface } from "@heroui/react"
+import { Modal, Spinner, Surface } from "@heroui/react"
 import { UserCard } from "../../components/userCard"
 import { useGetUserByIdQuery } from "../../app/services/userApi.ts"
 import { useState } from "react"
-import { CircleCheck } from "@gravity-ui/icons"
 import { EditForm } from "../../components/editForm"
 
 export const UserInfo =() => {

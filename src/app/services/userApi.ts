@@ -26,6 +26,7 @@ export const userApi = api.injectEndpoints({
       query: ({ id }) => ({
         url: `/users/${id}`,
       }),
+      providesTags:(result) => [{ type: "User",id: result?.id }],
     }),
     updateUser: build.mutation<void, { id: string, data: UpdateUserRequestProps }>({
       query: ({ id, data }) => {
@@ -36,13 +37,15 @@ export const userApi = api.injectEndpoints({
         if (data.bio) formData.append("bio", data.bio)
         if (data.location) formData.append("location", data.location)
         if (data.avatar) formData.append("avatar", data.avatar)
-
         return {
           url: `/users/${id}`,
           method: "PUT",
           body: formData,
         }
       },
+      invalidatesTags:(_result,_error,arg) => [
+        { type:"User",id:arg.id },
+      ],
     }),
   }),
 })
