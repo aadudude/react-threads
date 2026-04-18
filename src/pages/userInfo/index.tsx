@@ -45,10 +45,10 @@ export const UserInfo =() => {
           </p>
           <div className='flex gap-2.5' >
             <p className="text-sm text-muted">
-            Подписчики //todo
+            Подписчики {data.followers.length}
             </p>
             <p className="text-sm text-muted">
-            Подписки //todo
+            Подписки {data.following.length}
             </p>
           </div>
         </Surface>
