@@ -16,7 +16,7 @@ import { UserInfo } from "./pages/userInfo"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider attribute="class" defaultTheme="light">
+    <ThemeProvider attribute="class" defaultTheme="dark">
       <Provider store={store}>
         <BrowserRouter>
           <Routes>

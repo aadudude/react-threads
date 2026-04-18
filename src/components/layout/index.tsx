@@ -4,6 +4,8 @@ import { logout, selectUser } from "../../features/user/userSlice.ts"
 import { Button, Spinner } from "@heroui/react"
 import { NavBar } from "../navBar"
 import { UserCard } from "../userCard"
+import { useTheme } from "next-themes"
+import { Moon, Sun } from "@gravity-ui/icons"
 
 type LayoutProps = {
     showUserCard?: boolean
@@ -24,15 +26,19 @@ export const Layout = ({ showUserCard = true }: LayoutProps) => {
 
   const gridCols = showUserCard ? "lg:grid-cols-4" : "lg:grid-cols-3"
 
+  const { theme, setTheme } = useTheme()
+
   if (!user) return <div className="flex items-center gap-4">
     <Spinner/>
   </div>
 
   return (
-    <div className='flex flex-col bg-gray-100 px-4 md:px-6 lg:px-60 gap-8 '>
+    <div className='flex flex-col className="bg-background text-foreground px-4 md:px-6 lg:px-60 gap-8 '>
       <header className='flex justify-between mx-40 mt-6 '>
         <h1>Network Social</h1>
-        <div>
+        <div className='flex gap-1'>
+          <Button isIconOnly onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+            {theme === "dark" ? <Moon/> : <Sun/>}</Button>
           <Button onClick={handleLogout}>Logout</Button>
         </div>
       </header>
